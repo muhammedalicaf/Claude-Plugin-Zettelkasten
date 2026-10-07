@@ -87,6 +87,17 @@ Rules:
    `Kaynak` = numbered list `1. Başlık - URL` (one per line) in the same order as citations.
 4. Confirmation summary → explicit yes → `notion-create-pages`. Report the URL.
 
+**Model-sourced variant.** When the user explicitly asks you to write from your own
+knowledge (e.g. "kendi bilginle yaz", "kaynak olarak Claude yaz", or the web is
+unavailable and the user chooses to continue without it), produce a normal `Literatür Not`:
+- `Kaynak` = the model name and effort level as the user states it, e.g.
+  `Claude Fable 5.1 High` (ask once if they do not name it; never guess a version).
+- Body follows the same template **without** a "Kaynaklar" section, without `[n]`
+  citations, and without any disclaimer such as "web kaynağı olmadan yazıldı".
+- This matches the database's existing convention (most literature notes cite a model).
+- Only the user can choose this variant; never switch to it silently when research fails
+  (see "fewer than 3 sources" above).
+
 ### `kalici` — Kalıcı (Zettelkasten) Not
 
 1. Find candidate source notes: query the data source by title keywords / tags
@@ -166,7 +177,7 @@ as uploaded images. Tag with `Veri Bilimi` and/or `Analiz` plus topic tags.
 | `Name` | Plain text title, Turkish, no markdown, no leading emoji, no "(1)" numbering. |
 | `Kategori` | Exactly one of `Geçici Not`, `Literatür Not`, `Zettelkasten`. `Arşiv` is set only by the `duzenle` archive job, never on creation. |
 | `Etiket` | 1–5 tags. Prefer existing tags. A new tag needs the user's explicit approval and is created by passing the new name (Notion adds the option). |
-| `Kaynak` | Geçici: empty. Literatür: numbered `1. Başlık - URL` lines. Zettelkasten: numbered `<mention-page>` lines. Analiz: file name + method. |
+| `Kaynak` | Geçici: empty. Literatür: numbered `1. Başlık - URL` lines, or the model name + level (`Claude Fable 5.1 High`) for the model-sourced variant. Zettelkasten: numbered `<mention-page>` lines. Analiz: file name + method. |
 | `Bağlantılar` | Related notes as `<mention-page url="..."/>` separated by `, `. Empty if none. |
 | `Tarih` | Today's date (`date:Tarih:start` = YYYY-MM-DD, `date:Tarih:is_datetime` = 0). Never a month-start date. |
 
@@ -185,6 +196,9 @@ as uploaded images. Tag with `Veri Bilimi` and/or `Analiz` plus topic tags.
 
 - No page is created, updated, moved or re-tagged without an explicit Turkish yes
   after a summary. Silence, "hmm", or a new question is not a yes.
+- The summary shows properties, a 2–3 sentence body summary and the section outline.
+  **Never paste the full body text into the chat**; the user reads it in Notion after
+  saving. If the user asks to see a specific section before approval, show only that.
 - `paket` and `duzenle` use ONE batch approval for the whole set; all other workflows
   approve per note.
 - After every write, re-fetch the page once and report: title, category, tags, URL.
@@ -198,8 +212,8 @@ and ask: update the existing note, create anyway, or link to it.
 ## Hard rules
 
 1. Only this database, only these four category options (`Geçici Not`, `Literatür Not`, `Zettelkasten`, `Arşiv`). Never add another.
-2. Literature notes come from the web; model knowledge may frame questions but is never a
-   cited source.
+2. Literature notes come from the web by default; model knowledge becomes the `Kaynak`
+   only in the model-sourced variant the user explicitly chose.
 3. Never delete, never move pages out of the database. Archiving = `Kategori` → `Arşiv`, after batch approval.
 4. Never change the database schema (`notion-update-data-source`) unless the user asks for
    that exact change in this session.

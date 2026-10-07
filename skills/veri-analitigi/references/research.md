@@ -73,6 +73,6 @@ Diğerleriyle çelişki: …
 - 3 güvenilir kaynak bulunamadı → kullanıcıya söyle, devam etmek isteyip istemediğini sor.
 - Konu kişisel veri, sağlık/hukuk/finans tavsiyesi gibi hassas alana giriyorsa A–B sınıfı
   kaynak şart; C–D ile yazma.
-- Kullanıcının isteği "kendi bilgi birikiminle yaz" ise reddetme; ama notun `Kaynak`
-  alanına kaynak yazamayacağını ve bu notun literatür notu değil geçici not olarak
-  kaydedilmesi gerektiğini söyle.
+- Kullanıcının isteği "kendi bilgi birikiminle yaz" ise reddetme: zettelkasten skill'indeki
+  model kaynaklı varyant uygulanır (normal literatür notu, `Kaynak` = model adı ve seviyesi,
+  gövdede atıf ve uyarı yok).

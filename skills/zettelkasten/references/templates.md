@@ -56,6 +56,10 @@ Amaç: web kaynaklarından sentezlenmiş, atıflı konu notu. 300–900 kelime. 
 - `Kaynak` = gövdedeki "Kaynaklar" listesinin aynısı, satır başına `n. Başlık - URL`
 - `Bağlantılar` = veritabanında aynı konuda mevcut notlar (mention)
 
+Model kaynaklı varyant (kullanıcı açıkça isterse): aynı şablon, ancak "Kaynaklar" bölümü ve
+`\[n\]` atıfları yok; `Kaynak` = model adı ve seviyesi (`Claude Fable 5.1 High`). Gövdeye
+uyarı ya da "web kaynağı olmadan yazıldı" notu eklenmez.
+
 Veri analizi çıktısında (`analiz` modu) başlıklar: `## Veri Seti`, `## Yöntem`,
 `## Bulgular`, `## Görseller`, `## Sınırlılıklar`, `## Sonuç`; `Kaynak` =
 `1. dosya.csv (1.240×12) - Tanımlayıcı istatistik + korelasyon`.
@@ -96,9 +100,13 @@ Her not için, Türkçe, kısa:
 - **Bağlantılar:** … | —
 - **Tarih:** 2026-10-07
 - **Gövde özeti:** 2–3 cümle
+- **Bölümler:** Başlık 1 · Başlık 2 · Başlık 3
 
 Onaylıyor musunuz? (evet / düzelt: …)
 ```
+
+Gövdenin tam metni sohbete yazılmaz; kullanıcı notu Notion'da okur. Kullanıcı onaydan önce
+belirli bir bölümü görmek isterse yalnızca o bölüm gösterilir.
 
 Paket modunda üç not üst üste listelenir ve tek soru sorulur:
 "Üç notu da bu haliyle kaydedeyim mi?"
