@@ -1,0 +1,12 @@
+{
+  "name": "zettelkasten",
+  "version": "1.0.0",
+  "description": "Veri analitiği odaklı araştırma yapar; geçici, literatür ve kalıcı notları Zettelkasten yöntemiyle Notion veritabanına kaydeder.",
+  "author": {
+    "name": "Muhammed Ali Caf",
+    "email": "muhammedalicaf@gmail.com"
+  },
+  "repository": "https://github.com/muhammedalicaf/Claude-Plugin-Zettelkasten",
+  "license": "MIT",
+  "keywords": ["zettelkasten", "notion", "notes", "research", "data-analysis", "turkish"]
+}
