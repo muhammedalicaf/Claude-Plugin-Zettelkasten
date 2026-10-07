@@ -2,14 +2,13 @@
 
 Veri analitiği alanında uzmanlaştırılmış bu Claude Code plugin'i, kullanıcıdan gelen direktifler doğrultusunda analitik çalışmalar gerçekleştirir ve çalışma sonuçlarını **Zettelkasten** formatında **Notion veritabanına** kaydeder.
 
-> Bu plugin kişisel kullanım içindir: sahibinin Notion veritabanına sabitlenmiştir.
+> Bu plugin yalnızca kişisel kullanım içindir: sahibinin Notion veritabanına sabitlenmiştir ve dağıtım/kurulum için paketlenmemiştir.
 
 ## İçerik
 
 ```
 .claude-plugin/
   plugin.json            # Plugin manifesti
-  marketplace.json       # Tek girdili marketplace (kurulum için)
 .mcp.json                # Notion MCP bağlantısı (https://mcp.notion.com/mcp)
 commands/
   zettelkasten.md        # /zettelkasten komutu (tek komut + alt modlar)
@@ -32,23 +31,6 @@ skills/
 
 ### Connectors
 - **Notion MCP:** Kullanıcının çalışma alanına bağlanmak için `.mcp.json` üzerinden Notion'un resmi uzak MCP sunucusu kullanılır. İlk kullanımda `/mcp` ile **notion** sunucusuna yetki verilir.
-
-## Kurulum
-
-Claude Code içinde:
-
-```
-/plugin marketplace add muhammedalicaf/Claude-Plugin-Zettelkasten
-/plugin install zettelkasten@zettelkasten-marketplace
-```
-
-Yerel geliştirme için:
-
-```
-claude --plugin-dir /yol/Claude-Plugin-Zettelkasten
-```
-
-Ardından `/mcp` komutuyla Notion bağlantısını yetkilendirin.
 
 ## Notion Veritabanı
 
