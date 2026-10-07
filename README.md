@@ -39,7 +39,7 @@ Tek veritabanı: **Zettelkasten Veritabanı** (üst sayfa: *Zettelkasten*).
 | Özellik | Tür | Kullanım |
 |---|---|---|
 | Name | Başlık | İçeriğe göre düz metin başlık |
-| Kategori | Select | `Geçici Not` · `Literatür Not` · `Zettelkasten` |
+| Kategori | Select | `Geçici Not` · `Literatür Not` · `Zettelkasten` · `Arşiv` (arşivlenen notlar) |
 | Etiket | Multi-select | Mevcut etiketlerden seçilir; yeni etiket için onay istenir |
 | Kaynak | Metin | Literatür: `1. Başlık - URL` listesi · Zettelkasten: kaynak notların mention listesi |
 | Bağlantılar | Metin | İlgili notların mention'ları |
@@ -56,7 +56,7 @@ Tek komut: `/zettelkasten [mod] [konu]`. Mod verilmezse menü gösterilir.
 | `kalici` | Mevcut geçici/literatür notlarından tek fikirli, atıflı, bağlantılı **Zettelkasten** notu üretir |
 | `paket` | Geçici → literatür → kalıcı notu tek oturumda, tek toplu onayla üretip bağlar |
 | `beyin-firtinasi` | Fikri birlikte geliştirir; isterseniz geçici not olarak kaydeder |
-| `duzenle` | Etiket atama, şablona uygun hale getirme, fazlalık notları arşive taşıma (toplu onay) |
+| `duzenle` | Etiket atama, şablona uygun hale getirme, fazlalık notları arşivleme (Kategori → `Arşiv`, toplu onay) |
 | `analiz` | CSV/Excel dosyasını Python ile analiz eder, grafikleri Notion'a yükler, **Literatür Not** olarak kaydeder |
 
 **NOT:** Bu fonksiyonlar bir paket halinde tek oturumda kullanılabileceği gibi ayrı ayrı da kullanılabilir.
@@ -64,7 +64,7 @@ Tek komut: `/zettelkasten [mod] [konu]`. Mod verilmezse menü gösterilir.
 ### Temel kurallar
 - Hiçbir not, özet gösterilip **açık onay** alınmadan Notion'a yazılmaz.
 - Literatür notlarında kaynak zorunludur; model eğitim verisi kaynak olarak kullanılmaz.
-- Plugin not silmez; "silme" işlemi notu *Arşiv* sayfasına taşımaktır (Notion'dan kalıcı silme kullanıcıya bırakılır).
+- Plugin not silmez; "silme" işlemi notun kategorisini `Arşiv` yapmaktır (Notion'dan kalıcı silme kullanıcıya bırakılır).
 - Veritabanı şeması plugin tarafından değiştirilmez.
 
 ## Sürüm Geçmişi

@@ -50,7 +50,7 @@ free text (e.g. "aklımda bir fikir var" → `gecici`; "şunu araştır ve kayde
 | `kalici` | Kalıcı Not Oluşturma | 1 × Kategori = `Zettelkasten` from existing notes |
 | `paket` | Zettelkasten Paketi | geçici + literatür + kalıcı, end to end, one batch approval |
 | `beyin-firtinasi` | Beyin Fırtınası | develops an idea; optional save as `Geçici Not` |
-| `duzenle` | Düzenleme ve Organizasyon | tags, template normalization, archive |
+| `duzenle` | Düzenleme ve Organizasyon | tags, template normalization, archiving (Kategori = `Arşiv`) |
 | `analiz` | Veri Analizi | runs the `veri-analitigi` skill on a data file; result saved as `Literatür Not` |
 
 ### `gecici` — Geçici Not
@@ -128,12 +128,15 @@ Ask which of the three jobs the user wants, or run the one they named:
    on approval apply the smallest edit with `update_content`/`update_properties`. Never
    rewrite prose the user did not ask to change.
 3. **Fazlalık notları arşivleme**: Notion MCP has **no page-delete tool**. "Silme" therefore
-   means moving the page out of the database into the `Arşiv` page. Procedure: find
-   duplicates / empty / stale rows (empty title, empty body, same title as another row);
-   list candidates with the reason; **one batch approval**; then `notion-move-pages` to the
-   `Arşiv` page. If no page titled "Arşiv" exists under the Zettelkasten parent page, create
-   it once (`notion-create-pages`, parent `page_id` = parent page) after telling the user.
-   The user can permanently delete from Notion's UI later.
+   means setting the row's `Kategori` to `Arşiv` (the fourth select option). The page stays
+   in the database and keeps its tags, sources and links; only the category changes, so the
+   previous category is lost. Procedure: find duplicates / empty / stale rows (empty title,
+   empty body, same title as another row, or rows the user names); list candidates with the
+   reason and their current category; **one batch approval**; then for each page
+   `notion-update-page` / `update_properties` with `{"Kategori": "Arşiv"}`. Never move pages
+   out of the database. Rows with `Kategori = Arşiv` are excluded from candidate lists,
+   duplicate checks and `kalici` source searches unless the user asks for them. The user
+   can permanently delete from Notion's UI later; to undo, set the category back.
 
 ### `analiz` — Veri Analizi
 
@@ -147,7 +150,7 @@ as uploaded images. Tag with `Veri Bilimi` and/or `Analiz` plus topic tags.
 | Property | Rule |
 |---|---|
 | `Name` | Plain text title, Turkish, no markdown, no leading emoji, no "(1)" numbering. |
-| `Kategori` | Exactly one of `Geçici Not`, `Literatür Not`, `Zettelkasten`. |
+| `Kategori` | Exactly one of `Geçici Not`, `Literatür Not`, `Zettelkasten`. `Arşiv` is set only by the `duzenle` archive job, never on creation. |
 | `Etiket` | 1–5 tags. Prefer existing tags. A new tag needs the user's explicit approval and is created by passing the new name (Notion adds the option). |
 | `Kaynak` | Geçici: empty. Literatür: numbered `1. Başlık - URL` lines. Zettelkasten: numbered `<mention-page>` lines. Analiz: file name + method. |
 | `Bağlantılar` | Related notes as `<mention-page url="..."/>` separated by `, `. Empty if none. |
@@ -175,15 +178,15 @@ as uploaded images. Tag with `Veri Bilimi` and/or `Analiz` plus topic tags.
 ## Duplicate check
 
 Before creating any note, query the data source for rows whose `Name` contains the main
-keyword of the new title. If a close match exists, show it and ask: update the existing
-note, create anyway, or link to it.
+keyword of the new title, excluding `Kategori = 'Arşiv'`. If a close match exists, show it
+and ask: update the existing note, create anyway, or link to it.
 
 ## Hard rules
 
-1. Only this database, only these three categories. Never add a category option.
+1. Only this database, only these four category options (`Geçici Not`, `Literatür Not`, `Zettelkasten`, `Arşiv`). Never add another.
 2. Literature notes come from the web; model knowledge may frame questions but is never a
    cited source.
-3. Never delete. Archiving = moving to `Arşiv`, after batch approval.
+3. Never delete, never move pages out of the database. Archiving = `Kategori` → `Arşiv`, after batch approval.
 4. Never change the database schema (`notion-update-data-source`) unless the user asks for
    that exact change in this session.
 5. Respond in Turkish, keep it short, lead with the proposal.

@@ -21,7 +21,7 @@ Bu dosya modele yöneliktir; kullanıcıya gösterilmez.
 | Özellik | Tür | SQL sütunu | Not |
 |---|---|---|---|
 | `Name` | title | `"Name"` | Başlık. Düz metin. |
-| `Kategori` | select | `"Kategori"` | `Geçici Not` · `Literatür Not` · `Zettelkasten` |
+| `Kategori` | select | `"Kategori"` | `Geçici Not` · `Literatür Not` · `Zettelkasten` · `Arşiv` (yalnızca arşivleme) |
 | `Etiket` | multi_select | `"Etiket"` (JSON dizi) | Aşağıdaki listeden; yeni etiket onayla. |
 | `Kaynak` | text (rich) | `"Kaynak"` | Numaralı liste; satırlar `\n` ile ayrılır. |
 | `Bağlantılar` | text (rich) | `"Bağlantılar"` | `<mention-page>` listesi. |
@@ -54,10 +54,11 @@ Sistem sütunları: `url`, `createdTime`.
 Tablo adı veri kaynağı URL'sidir; her zaman çift tırnak içinde yazılır.
 
 ```sql
--- Başlıkta anahtar kelime (kopya kontrolü)
+-- Başlıkta anahtar kelime (kopya kontrolü; arşiv hariç)
 SELECT url, "Name", "Kategori", "date:Tarih:start"
 FROM "collection://3dad524b-926f-8016-b73f-000b8d778e7c"
-WHERE "Name" LIKE ? COLLATE NOCASE;            -- params: ["%makyavel%"]
+WHERE "Name" LIKE ? COLLATE NOCASE
+  AND ("Kategori" IS NULL OR "Kategori" <> 'Arşiv');   -- params: ["%makyavel%"]
 
 -- Kategoriye göre son notlar
 SELECT url, "Name", "Etiket", "Kaynak"
@@ -73,9 +74,14 @@ WHERE "Etiket" IS NULL OR "Etiket" = '[]';
 SELECT url, "Name" FROM "collection://3dad524b-926f-8016-b73f-000b8d778e7c"
 WHERE "Etiket" LIKE ?;                          -- params: ["%\"Veri Bilimi\"%"]
 
--- Aynı başlıklı satırlar (kopya adayları)
+-- Aynı başlıklı satırlar (kopya adayları; arşiv hariç)
 SELECT "Name", COUNT(*) AS n FROM "collection://3dad524b-926f-8016-b73f-000b8d778e7c"
+WHERE "Kategori" IS NULL OR "Kategori" <> 'Arşiv'
 GROUP BY "Name" HAVING n > 1;
+
+-- Arşivdekiler
+SELECT url, "Name" FROM "collection://3dad524b-926f-8016-b73f-000b8d778e7c"
+WHERE "Kategori" = 'Arşiv';
 ```
 
 Zengin metni (mention'lar) bozmadan okumak için `mode: "rows"` kullan; SQL çıktısı
@@ -127,5 +133,5 @@ gerekiyorsa tür (`Metod`, `Konsept`, `Analiz`, `Vaka Çalışması`, `Proje`). 
 | Başlıkla arama | `notion-search` (`data_source_url` ile daraltılabilir) |
 | Sayfa oluşturma | `notion-create-pages` |
 | Özellik / içerik güncelleme | `notion-update-page` (`update_properties`, `update_content`, `insert_content`) |
-| Arşive taşıma | `notion-move-pages` (new_parent = Arşiv sayfası `page_id`) |
+| Arşivleme | `notion-update-page` → `update_properties` → `{"Kategori": "Arşiv"}` |
 | Görsel yükleme | `notion-create-file-upload` → `curl` ile POST → `suggested_markdown` |

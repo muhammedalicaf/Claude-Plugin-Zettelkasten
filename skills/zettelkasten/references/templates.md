@@ -109,7 +109,7 @@ Düzenleme modunda tablo kullanılır:
 | # | Not | İşlem | Gerekçe |
 |---|-----|-------|---------|
 | 1 | Başlık | Etiket ekle: Yapay Zeka, Ai Agent | Gövde ajan mimarisini anlatıyor |
-| 2 | Başlık | Arşive taşı | Başlık ve gövde boş |
+| 2 | Başlık | Kategori → Arşiv (şu an: Geçici Not) | Başlık ve gövde boş |
 
 Tümünü uygulayayım mı? (evet / şu satırları çıkar: …)
 ```
