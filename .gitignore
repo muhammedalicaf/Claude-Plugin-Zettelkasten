@@ -1,0 +1,7 @@
+# Yerel çalışma dosyaları
+.DS_Store
+*.log
+__pycache__/
+*.pyc
+.venv/
+outputs/
