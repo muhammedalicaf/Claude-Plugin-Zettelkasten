@@ -47,19 +47,19 @@ Tek veritabanı: **Zettelkasten Veritabanı** (üst sayfa: *Zettelkasten*).
 
 ## Kullanım Kılavuzu
 
-Tek komut: `/zettelkasten [mod] [konu]`. Mod verilmezse menü gösterilir.
+Sohbete `/zettelkasten` ile başlanır; başka komut yoktur. Mod seçilmez: Claude ne istediğinizi söylediklerinizden anlar ve ilgili akışı yetenekler üzerinden yürütür.
 
-| Mod | Ne yapar |
+| Siz ne derseniz | Claude ne yapar |
 |---|---|
-| `gecici` | Aklınızdaki fikri yapılandırır, özet gösterir, onayla **Geçici Not** olarak kaydeder |
-| `literatur` | Web'de (önce Türkçe, sonra İngilizce) 3–5 kaynaklı araştırma yapar; tek notta sentezler, `[n]` atıflarla **Literatür Not** olarak kaydeder |
-| `kalici` | Mevcut geçici/literatür notlarından tek fikirli, atıflı, bağlantılı **Zettelkasten** notu üretir |
-| `paket` | Geçici → literatür → kalıcı notu tek oturumda, tek toplu onayla üretip bağlar |
-| `beyin-firtinasi` | Fikri birlikte geliştirir; isterseniz geçici not olarak kaydeder |
-| `duzenle` | Etiket atama, şablona uygun hale getirme, fazlalık notları arşivleme (Kategori → `Arşiv`, toplu onay) |
-| `analiz` | CSV/Excel dosyasını Python ile analiz eder, grafikleri Notion'a yükler, **Literatür Not** olarak kaydeder |
+| "Aklımda bir fikir var…" | Fikri yapılandırır, özet gösterir, onayla **Geçici Not** olarak kaydeder |
+| "Şu konuyu araştıralım" | Web'de (önce Türkçe, sonra İngilizce) 3–5 kaynaklı araştırma yapar; tek notta sentezler, `[n]` atıflarla **Literatür Not** olarak kaydeder |
+| "Bunlardan kalıcı not çıkar" | Mevcut geçici/literatür notlarından tek fikirli, atıflı, bağlantılı **Zettelkasten** notu üretir |
+| "Baştan sona / paket olarak yapalım" | Geçici → literatür → kalıcı notu tek oturumda, tek toplu onayla üretip bağlar |
+| "Beyin fırtınası yapalım" | Fikri birlikte geliştirir; isterseniz geçici not olarak kaydeder |
+| "Notları düzenle / etiketle / fazlalıkları temizle" | Etiket atama, şablona uygun hale getirme, fazlalık notları arşivleme (Kategori → `Arşiv`, toplu onay) |
+| Bir CSV/Excel dosyası paylaşırsanız | Python ile analiz eder, grafikleri Notion'a yükler, **Literatür Not** olarak kaydeder |
 
-**NOT:** Bu fonksiyonlar bir paket halinde tek oturumda kullanılabileceği gibi ayrı ayrı da kullanılabilir.
+**NOT:** Bu akışlar tek oturumda art arda kullanılabileceği gibi ayrı ayrı da kullanılabilir; Claude niyet belirsizse tek bir kısa soru sorar.
 
 ### Temel kurallar
 - Hiçbir not, özet gösterilip **açık onay** alınmadan Notion'a yazılmaz.

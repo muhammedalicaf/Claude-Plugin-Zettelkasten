@@ -37,21 +37,33 @@ Never ask the user which database to use. Never create notes anywhere else.
    to run `/mcp` and authorize the **notion** server, then retry. Do not fall back to
    writing notes anywhere else.
 
-## Modes
+## Intent detection (no modes, no menu)
 
-The `/zettelkasten` command passes a mode. Without a mode, show the menu below (in Turkish)
-and ask which one the user wants. Also enter a mode when the user describes the intent in
-free text (e.g. "aklımda bir fikir var" → `gecici`; "şunu araştır ve kaydet" → `literatur`).
+The user never selects a mode. `/zettelkasten` only opens the session; from then on you
+read each message and pick the workflow below. The workflow names (`gecici`, `literatur`,
+…) are internal labels, never shown to the user.
 
-| Mode | Turkish label | Produces |
+| Workflow | Typical cues (Turkish, non-exhaustive) | Produces |
 |---|---|---|
-| `gecici` | Geçici Not Oluşturma | 1 × Kategori = `Geçici Not` |
-| `literatur` | Literatür Not Oluşturma | 1 × Kategori = `Literatür Not` (web research) |
-| `kalici` | Kalıcı Not Oluşturma | 1 × Kategori = `Zettelkasten` from existing notes |
-| `paket` | Zettelkasten Paketi | geçici + literatür + kalıcı, end to end, one batch approval |
-| `beyin-firtinasi` | Beyin Fırtınası | develops an idea; optional save as `Geçici Not` |
-| `duzenle` | Düzenleme ve Organizasyon | tags, template normalization, archiving (Kategori = `Arşiv`) |
-| `analiz` | Veri Analizi | runs the `veri-analitigi` skill on a data file; result saved as `Literatür Not` |
+| `gecici` | "aklımda bir fikir var", "şunu not alalım", "bir şey geldi aklıma", "kaydedelim" (an idea, no research asked) | 1 × `Geçici Not` |
+| `literatur` | "araştıralım", "araştırma yapalım", "X nedir, kaynaklı", "literatür", "incele", "şu konuyu öğrenmek istiyorum" | 1 × `Literatür Not` (web research) |
+| `kalici` | "kalıcı not", "zettelkasten notu çıkar", "notlardan sentez", "mevcut notları birleştir", "bunu kalıcı yapalım" | 1 × `Zettelkasten` from existing notes |
+| `paket` | "baştan sona", "paket", "hepsini yapalım", "fikirden kalıcı nota kadar", "sıfırdan uçtan uca" | geçici + literatür + kalıcı, one batch approval |
+| `beyin-firtinasi` | "beyin fırtınası", "fikir geliştirelim", "ne düşünüyorsun", "tartışalım", "alternatifler" | develops an idea; optional `Geçici Not` |
+| `duzenle` | "etiketle", "düzenle", "organize et", "dağınık notlar", "şablona uydur", "fazlalıkları temizle", "arşivle", "sil" | tags, template normalization, archiving (`Kategori = Arşiv`) |
+| `analiz` | a file path/attachment with .csv/.xlsx/.json/.parquet, "veriyi analiz et", "grafik çıkar", "istatistik" | `veri-analitigi` skill → `Literatür Not` |
+
+Rules:
+- Decide from the **latest** message plus context; the workflow can change mid-session
+  (e.g. after a `gecici` save the user says "şimdi araştıralım" → `literatur` on that
+  idea, and the new note links back to the saved one).
+- Ambiguous ("şunu kaydet" with a long pasted text: geçici or literatür?) → ask one short
+  question with your best guess first: "Bunu geçici not olarak mı kaydedeyim, yoksa
+  kaynaklı bir literatür notu için araştırayım mı?"
+- An idea plus "ve araştır" in the same message → run `gecici` then `literatur`, each
+  with its own approval, unless the user asks for the whole chain ("paket" → one batch
+  approval).
+- Never answer "hangi modu istersiniz?"; the user should not have to know the workflows.
 
 ### `gecici` — Geçici Not
 
@@ -98,6 +110,8 @@ free text (e.g. "aklımda bir fikir var" → `gecici`; "şunu araştır ve kayde
 
 ### `paket` — Zettelkasten Paketi (end to end)
 
+Triggered when the user asks for the whole chain in one go (see cues above).
+
 1. Collect the idea (as in `gecici`), research it (as in `literatur`), then synthesize the
    permanent note (as in `kalici`), all in one session, **without saving in between**.
 2. Present ONE combined confirmation summary with all three notes.
@@ -118,7 +132,7 @@ free text (e.g. "aklımda bir fikir var" → `gecici`; "şunu araştır ve kayde
 
 ### `duzenle` — Düzenleme ve Organizasyon
 
-Ask which of the three jobs the user wants, or run the one they named:
+Infer which of the three jobs the user means; ask only if the message fits none:
 
 1. **Etiket atama**: query rows with empty or thin `Etiket`; propose tags per row in a
    table (title → proposed tags); one batch approval; then update each page's `Etiket`
@@ -140,12 +154,12 @@ Ask which of the three jobs the user wants, or run the one they named:
 
 ### `analiz` — Veri Analizi
 
-Hand the data file to the `veri-analitigi` skill (`references/data-analysis.md`). When the
+Triggered by a data file path or attachment. Hand the data file to the `veri-analitigi` skill (`references/data-analysis.md`). When the
 analysis is done, save it through the `literatur` flow with these differences:
 `Kaynak` = `1. <dosya adı> (<satır>×<sütun>) - <yöntem>` and charts embedded in the body
 as uploaded images. Tag with `Veri Bilimi` and/or `Analiz` plus topic tags.
 
-## Property conventions (all modes)
+## Property conventions (all workflows)
 
 | Property | Rule |
 |---|---|
@@ -171,8 +185,8 @@ as uploaded images. Tag with `Veri Bilimi` and/or `Analiz` plus topic tags.
 
 - No page is created, updated, moved or re-tagged without an explicit Turkish yes
   after a summary. Silence, "hmm", or a new question is not a yes.
-- `paket` and `duzenle` use ONE batch approval for the whole set; all other modes approve
-  per note.
+- `paket` and `duzenle` use ONE batch approval for the whole set; all other workflows
+  approve per note.
 - After every write, re-fetch the page once and report: title, category, tags, URL.
 
 ## Duplicate check
